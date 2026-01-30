@@ -14,12 +14,12 @@ public class Hello {
 //    }
 
     // spesific get
-    @GetMapping("/")
-    public String getAnotherHello(){ return "Hello with getMapping!"; }
-
-    // path variable
-    @GetMapping("/products/{id}")
-    public  String pathVar(@PathVariable String id){ return "Product id: " + id; }
+//    @GetMapping("/")
+//    public String getAnotherHello(){ return "Hello with getMapping!"; }
+//
+//    path variable
+//    @GetMapping("/products/{id}")
+//    public  String pathVar(@PathVariable String id){ return "Product id: " + id; }
 
     // req params
 //    @GetMapping("/products")
@@ -36,8 +36,8 @@ public class Hello {
 //        return "Page: " + page + ", size:" + size;
 //    }
 
-    @PostMapping("/products")
-    public String reqBody(@RequestBody HashMap<String, String> map){
-        return "Result: " + map;
-    }
+//    @PostMapping("/products")
+//    public String reqBody(@RequestBody HashMap<String, String> map){
+//        return "Result: " + map;
+//    }
 }
