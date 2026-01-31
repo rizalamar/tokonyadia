@@ -16,5 +16,5 @@ public class ProductResponse {
     private double price;
     private int stock;
     private LocalDateTime createdAt;
-    private LocalDateTime modifyAt;
+    private LocalDateTime modifiedAt;
 }
