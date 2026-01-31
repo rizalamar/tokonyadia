@@ -1,13 +1,9 @@
 package com.enigmacamp.todonyadia.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.enigmacamp.todonyadia.dto.response.ProductResponse;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -17,13 +13,25 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+@Builder
+public class Product extends BaseEntity{
 
     @Id
     @GeneratedValue
+    @UuidGenerator
     private UUID id;
     private String name;
-    private Double price;
+    private double price;
     private int stock;
 
+    public ProductResponse toResponse(){
+        return ProductResponse.builder()
+                .id(getId())
+                .name(getName())
+                .price(getPrice())
+                .stock(getStock())
+                .createdAt(getCreatedAt())
+                .modifyAt(getModifyAt())
+                .build();
+    }
 }

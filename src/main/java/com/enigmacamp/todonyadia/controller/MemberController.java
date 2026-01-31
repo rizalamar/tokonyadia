@@ -1,5 +1,6 @@
 package com.enigmacamp.todonyadia.controller;
 
+import com.enigmacamp.todonyadia.dto.request.MemberRequest;
 import com.enigmacamp.todonyadia.entities.Member;
 import com.enigmacamp.todonyadia.service.member.MemberService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
@@ -18,7 +19,7 @@ public class MemberController {
     }
 
     @PostMapping()
-    public Member addMember(@RequestBody Member member){
+    public Member addMember(@RequestBody MemberRequest member){
         return memberService.saveMember(member);
     }
 
@@ -33,7 +34,7 @@ public class MemberController {
     }
 
     @PutMapping("/{id}")
-    public Member updateMember(@PathVariable UUID id, @RequestBody Member member){
+    public Member updateMember(@PathVariable UUID id, @RequestBody MemberRequest member){
         return memberService.updateMember(id, member);
     }
 

@@ -1,11 +1,17 @@
 package com.enigmacamp.todonyadia.controller;
 
+import com.enigmacamp.todonyadia.dto.request.ProductRequest;
+import com.enigmacamp.todonyadia.dto.response.ProductResponse;
 import com.enigmacamp.todonyadia.entities.Product;
 import com.enigmacamp.todonyadia.service.product.ProductService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,13 +24,18 @@ public class ProductController {
     }
 
     @PostMapping("")
-    public Product addProduct(@RequestBody Product product){
-        return productService.saveProduct(product);
+    public ResponseEntity <ProductResponse> addProduct(@RequestBody ProductRequest payload){
+        Product product = productService.saveProduct(payload);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product.toResponse());
     }
 
     @GetMapping("")
-    public List<Product> getAllProduct(){
-        return productService.getAllProduct();
+    public Page<ProductResponse> getAllProduct(
+        @RequestParam(name = "page", defaultValue = "1") int page,
+        @RequestParam(name = "size", defaultValue = "3") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        return productService.getAllProduct(pageable);
     }
 
     @GetMapping("/{id}")
@@ -33,7 +44,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable UUID id , @RequestBody Product product){
+    public Product updateProduct(@PathVariable UUID id , @RequestBody ProductRequest product){
         return productService.updateProduct(id, product);
     }
 

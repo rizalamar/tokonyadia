@@ -1,13 +1,18 @@
 package com.enigmacamp.todonyadia.service.customer;
 
+import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
 import com.enigmacamp.todonyadia.entities.Customer;
 import com.enigmacamp.todonyadia.entities.Member;
 import com.enigmacamp.todonyadia.repository.CustomerRepository;
 import com.enigmacamp.todonyadia.service.member.MemberService;
+import com.enigmacamp.todonyadia.utils.exceptions.DataNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.enigmacamp.todonyadia.utils.constants.ResponseMessage.CUSTOMER;
+import static com.enigmacamp.todonyadia.utils.constants.ResponseMessage.NOT_FOUND_MESSAGE;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -21,7 +26,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public Customer saveCustomer(CustomerRequest payload) {
+        Customer customer = Customer.builder()
+                .fullname(payload.fullname())
+                .address(payload.address())
+                .email(payload.email())
+                .gender(payload.gender())
+                .build();
         return customerRepository.save(customer);
     }
 
@@ -32,7 +43,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomerById(UUID id) {
-        return customerRepository.findById(id).get();
+        if(customerRepository.findById(id).isPresent()){
+            return customerRepository.findById(id).get();
+        } else {
+            throw new DataNotFoundException(NOT_FOUND_MESSAGE);
+        }
     }
 
     @Override
@@ -41,15 +56,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(UUID id,Customer customerUpdate) {
-        Customer customer = getCustomerById(id);
-
-        customer.setFullname(customerUpdate.getFullname());
-        customer.setAddress(customerUpdate.getAddress());
-        customer.setEmail(customerUpdate.getEmail());
-        customer.setGender(customerUpdate.getGender());
-
-        return saveCustomer(customer);
+    public Customer updateCustomer(UUID id,CustomerRequest customerUpdate) {
+        Customer customer = Customer.builder()
+                .fullname(customerUpdate.fullname())
+                .address(customerUpdate.address())
+                .email(customerUpdate.email())
+                .gender(customerUpdate.gender())
+                .build();
+        return customerRepository.save(customer);
     }
 
     @Override

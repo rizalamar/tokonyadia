@@ -1,5 +1,6 @@
 package com.enigmacamp.todonyadia.controller;
 
+import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
 import com.enigmacamp.todonyadia.entities.Customer;
 import com.enigmacamp.todonyadia.service.customer.CustomerService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
@@ -19,7 +20,7 @@ public class CustomerController {
     }
 
     @PostMapping()
-    public Customer addCustomer(@RequestBody Customer customer){
+    public Customer addCustomer(@RequestBody CustomerRequest customer){
         return customerService.saveCustomer(customer);
     }
 
@@ -42,7 +43,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable UUID id,  @RequestBody Customer customer){
+    public Customer updateCustomer(@PathVariable UUID id,  @RequestBody CustomerRequest customer){
         return customerService.updateCustomer(id, customer);
     }
 

@@ -1,5 +1,6 @@
 package com.enigmacamp.todonyadia.service.member;
 
+import com.enigmacamp.todonyadia.dto.request.MemberRequest;
 import com.enigmacamp.todonyadia.entities.Member;
 import com.enigmacamp.todonyadia.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,11 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Member saveMember(Member member) {
+    public Member saveMember(MemberRequest payload) {
+        Member member = Member.builder()
+                .username(payload.username())
+                .password(payload.password())
+                .build();
         return memberRepository.save(member);
     }
 
@@ -31,13 +36,12 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Member updateMember(UUID id, Member memberUpdate) {
-        Member member = getMemberById(id);
-
-        member.setUsername(memberUpdate.getUsername());
-        member.setPassword(memberUpdate.getPassword());
-
-        return saveMember(member);
+    public Member updateMember(UUID id, MemberRequest memberUpdate) {
+        Member member = Member.builder()
+                .username(memberUpdate.username())
+                .password(memberUpdate.password())
+                .build();
+        return memberRepository.save(member);
     }
 
     @Override
