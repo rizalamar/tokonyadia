@@ -51,6 +51,10 @@ public class MemberServiceImpl implements MemberService{
             .orElseThrow(
                 () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.MEMBER, id))
             );
+
+        member.setUsername(memberUpdate.username());
+        member.setPassword(memberUpdate.password());
+
         memberRepository.save(member);
         return member.toResponse();
     }
