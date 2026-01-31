@@ -47,14 +47,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse updateProduct(UUID id, ProductRequest productUpdate) {
-        Product product = Product.builder()
-                .id(id)
-                .name(productUpdate.name())
-                .price(productUpdate.price())
-                .stock(productUpdate.stock())
-                .build();
-         productRepository.save(product);
-         return product.toResponse();
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new DataNotFoundException(
+                String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.PRODUCT, id)
+            ));
+
+        product.setName(productUpdate.name());
+        product.setPrice(productUpdate.price());
+        product.setStock(productUpdate.stock());
+
+        productRepository.save(product);
+        return product.toResponse();
     }
 
     @Override

@@ -1,8 +1,13 @@
 package com.enigmacamp.todonyadia.service.member;
 
 import com.enigmacamp.todonyadia.dto.request.MemberRequest;
+import com.enigmacamp.todonyadia.dto.response.MemberResponse;
 import com.enigmacamp.todonyadia.entities.Member;
 import com.enigmacamp.todonyadia.repository.MemberRepository;
+import com.enigmacamp.todonyadia.utils.constants.ResponseMessage;
+import com.enigmacamp.todonyadia.utils.exceptions.DataNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,31 +22,37 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Member saveMember(MemberRequest payload) {
+    public MemberResponse saveMember(MemberRequest payload) {
         Member member = Member.builder()
                 .username(payload.username())
                 .password(payload.password())
                 .build();
-        return memberRepository.save(member);
+        memberRepository.save(member);
+        return member.toResponse();
     }
 
     @Override
-    public List<Member> getAllMember() {
-        return memberRepository.findAll();
+    public Page<MemberResponse> getAllMember(Pageable pageable) {
+        return memberRepository.findAll(pageable).map(Member::toResponse);
     }
 
     @Override
-    public Member getMemberById(UUID id) {
-        return memberRepository.findById(id).get();
+    public MemberResponse getMemberById(UUID id) {
+        Member member = memberRepository.findById(id)
+            .orElseThrow(
+                () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.MEMBER, id))
+            );
+        return member.toResponse();
     }
 
     @Override
-    public Member updateMember(UUID id, MemberRequest memberUpdate) {
-        Member member = Member.builder()
-                .username(memberUpdate.username())
-                .password(memberUpdate.password())
-                .build();
-        return memberRepository.save(member);
+    public MemberResponse updateMember(UUID id, MemberRequest memberUpdate) {
+        Member member = memberRepository.findById(id)
+            .orElseThrow(
+                () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.MEMBER, id))
+            );
+        memberRepository.save(member);
+        return member.toResponse();
     }
 
     @Override

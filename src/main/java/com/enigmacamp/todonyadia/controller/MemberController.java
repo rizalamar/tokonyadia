@@ -1,9 +1,15 @@
 package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.MemberRequest;
+import com.enigmacamp.todonyadia.dto.response.MemberResponse;
 import com.enigmacamp.todonyadia.entities.Member;
 import com.enigmacamp.todonyadia.service.member.MemberService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,22 +25,27 @@ public class MemberController {
     }
 
     @PostMapping()
-    public Member addMember(@RequestBody MemberRequest member){
-        return memberService.saveMember(member);
+    public ResponseEntity <MemberResponse> addMember(@RequestBody MemberRequest payload){
+        MemberResponse memberResponse = memberService.saveMember(payload);
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
     }
 
     @GetMapping()
-    public List<Member> getAllMember(){
-        return memberService.getAllMember();
+    public Page<MemberResponse> getAllMember(
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "3") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        return memberService.getAllMember(pageable);
     }
 
     @GetMapping("/{id}")
-    public Member getMemberById(@PathVariable UUID id){
+    public MemberResponse getMemberById(@PathVariable UUID id){
         return memberService.getMemberById(id);
     }
 
     @PutMapping("/{id}")
-    public Member updateMember(@PathVariable UUID id, @RequestBody MemberRequest member){
+    public MemberResponse updateMember(@PathVariable UUID id, @RequestBody MemberRequest member){
         return memberService.updateMember(id, member);
     }
 

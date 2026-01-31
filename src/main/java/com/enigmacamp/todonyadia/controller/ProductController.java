@@ -31,7 +31,7 @@ public class ProductController {
 
     @GetMapping("")
     public Page<ProductResponse> getAllProduct(
-        @RequestParam(name = "page", defaultValue = "1") int page,
+        @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "3") int size
     ){
         Pageable pageable = PageRequest.of(page, size);
