@@ -31,7 +31,7 @@ public class Product extends BaseEntity{
                 .price(getPrice())
                 .stock(getStock())
                 .createdAt(getCreatedAt())
-                .modifyAt(getModifyAt())
+                .modifyAt(getModifiedAt())
                 .build();
     }
 }
