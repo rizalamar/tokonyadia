@@ -25,8 +25,8 @@ public class ProductController {
 
     @PostMapping("")
     public ResponseEntity <ProductResponse> addProduct(@RequestBody ProductRequest payload){
-        Product product = productService.saveProduct(payload);
-        return ResponseEntity.status(HttpStatus.CREATED).body(product.toResponse());
+        ProductResponse productResponse = productService.saveProduct(payload);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productResponse);
     }
 
     @GetMapping("")
@@ -39,12 +39,12 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable UUID id){
+    public ProductResponse getProductById(@PathVariable UUID id){
         return productService.getProductById(id);
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable UUID id , @RequestBody ProductRequest product){
+    public ProductResponse updateProduct(@PathVariable UUID id , @RequestBody ProductRequest product){
         return productService.updateProduct(id, product);
     }
 

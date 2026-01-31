@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
-    Product saveProduct(ProductRequest product);
+    ProductResponse saveProduct(ProductRequest product);
     Page<ProductResponse> getAllProduct(Pageable pageable);
-    Product getProductById(UUID id);
-    Product updateProduct(UUID id, ProductRequest product);
+    ProductResponse getProductById(UUID id);
+    ProductResponse updateProduct(UUID id, ProductRequest product);
     void deleteProduct(UUID id);
 }

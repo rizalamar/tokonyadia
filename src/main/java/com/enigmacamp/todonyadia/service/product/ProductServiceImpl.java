@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,13 +21,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product saveProduct(ProductRequest payload) {
+    public ProductResponse saveProduct(ProductRequest payload) {
         Product product = Product.builder()
                 .name(payload.name())
                 .price(payload.price())
                 .stock(payload.stock())
                 .build();
-        return productRepository.save(product);
+        productRepository.save(product);
+        return product.toResponse();
     }
 
     @Override
@@ -37,23 +37,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(UUID id) {
-        if(productRepository.findById(id).isPresent()){
-            return productRepository.findById(id).get();
-        } else {
-            throw new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.PRODUCT, id));
-        }
+    public ProductResponse getProductById(UUID id) {
+       Product product = productRepository.findById(id)
+               .orElseThrow(
+                   () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.PRODUCT, id)
+               ));
+       return product.toResponse();
     }
 
     @Override
-    public Product updateProduct(UUID id, ProductRequest productUpdate) {
+    public ProductResponse updateProduct(UUID id, ProductRequest productUpdate) {
         Product product = Product.builder()
                 .id(id)
                 .name(productUpdate.name())
                 .price(productUpdate.price())
                 .stock(productUpdate.stock())
                 .build();
-        return productRepository.save(product);
+         productRepository.save(product);
+         return product.toResponse();
     }
 
     @Override
