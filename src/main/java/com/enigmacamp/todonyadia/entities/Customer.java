@@ -1,5 +1,7 @@
 package com.enigmacamp.todonyadia.entities;
 
+import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
+import com.enigmacamp.todonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.todonyadia.utils.Gender;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Customer {
+public class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -29,4 +31,17 @@ public class Customer {
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public CustomerResponse toResponse(){
+        return CustomerResponse.builder()
+                .id(getId())
+                .fullname(getFullname())
+                .address(getAddress())
+                .email(getEmail())
+                .gender(getGender())
+                .member(getMember() != null ? getMember().toResponse() : null)
+                .createdAt(getCreatedAt())
+                .modifiedAt(getModifiedAt())
+                .build();
+    }
 }

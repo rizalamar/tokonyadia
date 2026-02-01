@@ -1,41 +1,49 @@
 package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
-import com.enigmacamp.todonyadia.entities.Customer;
+import com.enigmacamp.todonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.todonyadia.service.customer.CustomerService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
-import jakarta.servlet.ServletRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping(ApiUrlConstants.CUSTOMER)
 public class CustomerController {
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
     @PostMapping()
-    public Customer addCustomer(@RequestBody CustomerRequest customer){
-        return customerService.saveCustomer(customer);
+    public ResponseEntity <CustomerResponse> addCustomer(@RequestBody CustomerRequest payload){
+        CustomerResponse customerResponse = customerService.saveCustomer(payload);
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerResponse);
     }
 
     @GetMapping()
-    public List<Customer> getAllCustomer(){
-        return customerService.getAllCustomer();
+    public Page<CustomerResponse> getAllCustomer(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "3") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        return customerService.getAllCustomer(pageable);
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable UUID id){
+    public CustomerResponse getCustomerById(@PathVariable UUID id){
         return customerService.getCustomerById(id);
     }
 
     @GetMapping("/search")
-    public Customer getCustomerByFullnameAndEmail(
+    public CustomerResponse getCustomerByFullnameAndEmail(
         @RequestParam String fullname,
         @RequestParam String email
     ){
@@ -43,7 +51,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable UUID id,  @RequestBody CustomerRequest customer){
+    public CustomerResponse updateCustomer(@PathVariable UUID id,  @RequestBody CustomerRequest customer){
         return customerService.updateCustomer(id, customer);
     }
 
