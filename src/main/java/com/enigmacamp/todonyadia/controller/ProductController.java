@@ -2,7 +2,6 @@ package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.ProductRequest;
 import com.enigmacamp.todonyadia.dto.response.ProductResponse;
-import com.enigmacamp.todonyadia.entities.Product;
 import com.enigmacamp.todonyadia.service.product.ProductService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
 import org.springframework.data.domain.Page;

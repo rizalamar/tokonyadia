@@ -62,6 +62,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(UUID id) {
+        if(!productRepository.existsById(id)){
+            throw new DataNotFoundException(ResponseMessage.NOT_FOUND_MESSAGE);
+        }
+
         productRepository.deleteById(id);
     }
 }
