@@ -1,6 +1,7 @@
 package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.ProductRequest;
+import com.enigmacamp.todonyadia.dto.request.ProductSearch;
 import com.enigmacamp.todonyadia.dto.response.PageResponseWrapper;
 import com.enigmacamp.todonyadia.dto.response.ProductResponse;
 import com.enigmacamp.todonyadia.service.product.ProductService;
@@ -31,17 +32,17 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<PageResponseWrapper<ProductResponse>> getAllProduct(
-        @RequestParam(name = "page", defaultValue = "1") int page,
-        @RequestParam(name = "size", defaultValue = "3") int size,
-        @RequestParam(name = "sort", defaultValue = "id") String sort,
-        @RequestParam(name = "order", defaultValue = "asc") String order
-    ){
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "3") int size,
+            @RequestParam(name = "sort", defaultValue = "id") String sort,
+            @RequestParam(name = "order", defaultValue = "asc") String order,
+            @ModelAttribute ProductSearch productSearch
+            ){
         Sort sortOrder = order.equalsIgnoreCase("desc") ? Sort.by(sort).descending() : Sort.by(sort).ascending();
-        // mencegah page = 0 / -1
         int firstPage = (page > 0) ? page - 1 : 0;
 
         Pageable pageable = PageRequest.of(firstPage, size, sortOrder);
-        return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(productService.getAllProduct(pageable)));
+        return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(productService.getAllProduct(pageable, productSearch)));
     }
 
     @GetMapping("/{id}")
