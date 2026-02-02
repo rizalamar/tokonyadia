@@ -3,7 +3,6 @@ package com.enigmacamp.todonyadia.dto.response;
 import com.enigmacamp.todonyadia.entities.Member;
 import com.enigmacamp.todonyadia.utils.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
 import lombok.*;
 
 import java.time.LocalDateTime;

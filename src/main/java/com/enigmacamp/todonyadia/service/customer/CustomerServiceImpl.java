@@ -1,14 +1,19 @@
 package com.enigmacamp.todonyadia.service.customer;
 
 import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
+import com.enigmacamp.todonyadia.dto.request.CustomerSearch;
 import com.enigmacamp.todonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.todonyadia.entities.Customer;
+import com.enigmacamp.todonyadia.entities.Member;
 import com.enigmacamp.todonyadia.repository.CustomerRepository;
+import com.enigmacamp.todonyadia.repository.MemberRepository;
 import com.enigmacamp.todonyadia.service.member.MemberService;
+import com.enigmacamp.todonyadia.specification.CustomerSpecification;
 import com.enigmacamp.todonyadia.utils.constants.ResponseMessage;
 import com.enigmacamp.todonyadia.utils.exceptions.DataNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,12 +21,11 @@ import java.util.UUID;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private final MemberService memberService;
     private final CustomerRepository customerRepository;
+    MemberService memberService;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, MemberService memberService) {
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.memberService = memberService;
     }
 
     @Override
@@ -32,13 +36,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .email(payload.email())
                 .gender(payload.gender())
                 .build();
+
         customerRepository.save(customer);
         return customer.toResponse();
     }
 
     @Override
-    public Page<CustomerResponse> getAllCustomer(Pageable pageable) {
-        return customerRepository.findAll(pageable).map(Customer::toResponse);
+    public Page<CustomerResponse> getAllCustomer(Pageable pageable, CustomerSearch customerSearch) {
+        Specification<Customer> specification = CustomerSpecification.getSpecification(customerSearch);
+        return customerRepository.findAll(specification, pageable).map(Customer::toResponse);
     }
 
     @Override
@@ -78,5 +84,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomer(UUID id) {
         customerRepository.deleteById(id);
+    }
+
+    @Override
+    public Customer getCustomerEntityById(UUID id) {
+        return customerRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Customer not found"));
     }
 }

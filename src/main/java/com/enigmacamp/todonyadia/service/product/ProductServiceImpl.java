@@ -69,7 +69,12 @@ public class ProductServiceImpl implements ProductService {
         if(!productRepository.existsById(id)){
             throw new DataNotFoundException(ResponseMessage.NOT_FOUND_MESSAGE);
         }
-
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public Product getProductEntityById(UUID id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Product not found"));
     }
 }

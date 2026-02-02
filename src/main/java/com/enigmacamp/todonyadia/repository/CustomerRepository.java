@@ -2,13 +2,14 @@ package com.enigmacamp.todonyadia.repository;
 
 import com.enigmacamp.todonyadia.entities.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, UUID> {
+public interface CustomerRepository extends JpaRepository<Customer, UUID>, JpaSpecificationExecutor<Customer> {
 
     // Query method
     // Spring otomatis bikin query: SELECT fullname, email FROM CUSTOMER WHERE fullname AND email

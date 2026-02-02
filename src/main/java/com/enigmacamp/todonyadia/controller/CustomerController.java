@@ -1,6 +1,7 @@
 package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
+import com.enigmacamp.todonyadia.dto.request.CustomerSearch;
 import com.enigmacamp.todonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.todonyadia.dto.response.PageResponseWrapper;
 import com.enigmacamp.todonyadia.service.customer.CustomerService;
@@ -35,12 +36,13 @@ public class CustomerController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size,
             @RequestParam(name = "sort", defaultValue = "id") String sort,
-            @RequestParam(name = "order", defaultValue = "asc") String order
+            @RequestParam(name = "order", defaultValue = "asc") String order,
+            @ModelAttribute CustomerSearch customerSearch
     ){
         Sort sortOrder = order.equalsIgnoreCase("desc") ? Sort.by(sort).descending() : Sort.by(sort).ascending();
         int firstPage = (page > 0) ? page - 1 : 0;
         Pageable pageable = PageRequest.of(firstPage, size, sortOrder);
-        return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(customerService.getAllCustomer(pageable)));
+        return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(customerService.getAllCustomer(pageable, customerSearch)));
     }
 
     @GetMapping("/{id}")

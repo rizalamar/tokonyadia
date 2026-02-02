@@ -1,6 +1,5 @@
 package com.enigmacamp.todonyadia.entities;
 
-import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
 import com.enigmacamp.todonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.todonyadia.utils.Gender;
 import jakarta.persistence.*;

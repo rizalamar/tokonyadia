@@ -21,8 +21,8 @@ public class Product extends BaseEntity{
     @UuidGenerator
     private UUID id;
     private String name;
-    private double price;
-    private int stock;
+    private Double price;
+    private Integer stock;
 
     public ProductResponse toResponse(){
         return ProductResponse.builder()

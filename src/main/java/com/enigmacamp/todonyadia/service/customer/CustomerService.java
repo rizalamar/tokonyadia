@@ -1,6 +1,7 @@
 package com.enigmacamp.todonyadia.service.customer;
 
 import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
+import com.enigmacamp.todonyadia.dto.request.CustomerSearch;
 import com.enigmacamp.todonyadia.dto.response.CustomerResponse;
 import com.enigmacamp.todonyadia.entities.Customer;
 import org.springframework.data.domain.Page;
@@ -11,8 +12,9 @@ import java.util.UUID;
 
 public interface CustomerService {
     CustomerResponse saveCustomer(CustomerRequest customer);
-    Page<CustomerResponse> getAllCustomer(Pageable pageable);
+    Page<CustomerResponse> getAllCustomer(Pageable pageable, CustomerSearch customerSearch);
     CustomerResponse getCustomerById(UUID id);
+    Customer getCustomerEntityById(UUID id);
     CustomerResponse updateCustomer(UUID id, CustomerRequest customer);
     void deleteCustomer(UUID id);
     CustomerResponse findByFullnameAndEmail(String fullname, String email);
