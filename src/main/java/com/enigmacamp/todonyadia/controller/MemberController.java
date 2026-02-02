@@ -2,23 +2,21 @@ package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.MemberRequest;
 import com.enigmacamp.todonyadia.dto.response.MemberResponse;
-import com.enigmacamp.todonyadia.entities.Member;
+import com.enigmacamp.todonyadia.dto.response.PageResponseWrapper;
 import com.enigmacamp.todonyadia.service.member.MemberService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping(ApiUrlConstants.MEMBER)
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -31,12 +29,12 @@ public class MemberController {
     }
 
     @GetMapping()
-    public Page<MemberResponse> getAllMember(
+    public ResponseEntity<PageResponseWrapper<MemberResponse>> getAllMember(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "3") int size
     ){
         Pageable pageable = PageRequest.of(page, size);
-        return memberService.getAllMember(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(memberService.getAllMember(pageable)));
     }
 
     @GetMapping("/{id}")

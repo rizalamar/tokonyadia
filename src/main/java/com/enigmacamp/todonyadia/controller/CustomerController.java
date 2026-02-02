@@ -2,6 +2,7 @@ package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.CustomerRequest;
 import com.enigmacamp.todonyadia.dto.response.CustomerResponse;
+import com.enigmacamp.todonyadia.dto.response.PageResponseWrapper;
 import com.enigmacamp.todonyadia.service.customer.CustomerService;
 import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
 import org.springframework.data.domain.Page;
@@ -29,12 +30,12 @@ public class CustomerController {
     }
 
     @GetMapping()
-    public Page<CustomerResponse> getAllCustomer(
+    public ResponseEntity<PageResponseWrapper<CustomerResponse>> getAllCustomer(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size
     ){
         Pageable pageable = PageRequest.of(page, size);
-        return customerService.getAllCustomer(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(customerService.getAllCustomer(pageable)));
     }
 
     @GetMapping("/{id}")
