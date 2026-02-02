@@ -29,6 +29,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     public Purchase savePurchase(Purchase purchase){
+        // date otomatis
         if (purchase.getTransactiondate() == null) purchase.setTransactiondate(LocalDateTime.now());
 
         Customer customer = customerService.getCustomerEntityById(purchase.getCustomer().getId());

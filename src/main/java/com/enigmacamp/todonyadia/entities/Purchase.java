@@ -26,7 +26,7 @@ public class Purchase {
     @UuidGenerator
     private UUID id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime transactiondate;
 
     @ManyToOne(fetch = FetchType.EAGER) // agar info customer terbawa
