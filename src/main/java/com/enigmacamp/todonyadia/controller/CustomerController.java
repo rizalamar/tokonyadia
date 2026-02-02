@@ -8,6 +8,7 @@ import com.enigmacamp.todonyadia.utils.constants.ApiUrlConstants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +33,13 @@ public class CustomerController {
     @GetMapping()
     public ResponseEntity<PageResponseWrapper<CustomerResponse>> getAllCustomer(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "3") int size
+            @RequestParam(name = "size", defaultValue = "3") int size,
+            @RequestParam(name = "sort", defaultValue = "id") String sort,
+            @RequestParam(name = "order", defaultValue = "asc") String order
     ){
-        Pageable pageable = PageRequest.of(page, size);
+        Sort sortOrder = order.equalsIgnoreCase("desc") ? Sort.by(sort).descending() : Sort.by(sort).ascending();
+        int firstPage = (page > 0) ? page - 1 : 0;
+        Pageable pageable = PageRequest.of(firstPage, size, sortOrder);
         return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(customerService.getAllCustomer(pageable)));
     }
 

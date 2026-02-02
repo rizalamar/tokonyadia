@@ -40,7 +40,6 @@ public class ProductController {
             ){
         Sort sortOrder = order.equalsIgnoreCase("desc") ? Sort.by(sort).descending() : Sort.by(sort).ascending();
         int firstPage = (page > 0) ? page - 1 : 0;
-
         Pageable pageable = PageRequest.of(firstPage, size, sortOrder);
         return ResponseEntity.status(HttpStatus.OK).body(new PageResponseWrapper<>(productService.getAllProduct(pageable, productSearch)));
     }
