@@ -12,11 +12,11 @@ public class PurchaseDetailResponse {
     private Integer quantity;
     private Double priceSell;
     private Double subTotal;
-    private ProductResponse product;`
+    private ProductResponse product;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedAt;
-}`
+}
