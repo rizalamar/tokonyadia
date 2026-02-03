@@ -1,12 +1,17 @@
 package com.enigmacamp.todonyadia.dto.response;
 
-import com.enigmacamp.todonyadia.entities.Product;
-import com.enigmacamp.todonyadia.entities.Purchase;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jdk.jshell.Snippet;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PurchaseDetailResponse {
     private UUID id;
     private Integer quantity;

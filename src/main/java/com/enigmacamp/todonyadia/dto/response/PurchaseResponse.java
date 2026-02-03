@@ -22,7 +22,7 @@ public class PurchaseResponse {
 
     private CustomerResponse customer;
 
-    private List<PurchaseDetail> purchaseDetails = new ArrayList<>();
+    private List<PurchaseDetailResponse> purchaseDetails = new ArrayList<>();
     private Double grandTotal;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

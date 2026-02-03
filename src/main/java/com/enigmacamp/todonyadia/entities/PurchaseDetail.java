@@ -1,11 +1,9 @@
 package com.enigmacamp.todonyadia.entities;
 
+import com.enigmacamp.todonyadia.dto.response.PurchaseDetailResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -16,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class PurchaseDetail {
     @Id
     @GeneratedValue

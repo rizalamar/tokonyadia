@@ -1,13 +1,11 @@
 package com.enigmacamp.todonyadia.entities;
 
+import com.enigmacamp.todonyadia.dto.response.PurchaseDetailResponse;
 import com.enigmacamp.todonyadia.dto.response.PurchaseResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
@@ -21,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Purchase extends BaseEntity {
     @Id
     @GeneratedValue
@@ -43,11 +42,28 @@ public class Purchase extends BaseEntity {
     private List<PurchaseDetail> purchaseDetails = new ArrayList<>();
 
     public PurchaseResponse toResponse(){
+        List<PurchaseDetailResponse> detailResponses = this.purchaseDetails.stream()
+                .map(detail -> {
+                    Double subTotal = detail.getQuantity() * detail.getPriceSell();
+                    return PurchaseDetailResponse.builder()
+                            .id(detail.getId())
+                            .quantity(detail.getQuantity())
+                            .priceSell(detail.getPriceSell())
+                            .subTotal(subTotal) // Set SubTotal
+                            .product(detail.getProduct().toResponse())
+                            .build();
+                }).toList();
+
+        Double total = detailResponses.stream()
+                .mapToDouble(PurchaseDetailResponse::getSubTotal)
+                .sum();
+
         return PurchaseResponse.builder()
                 .id(getId())
                 .transactiondate(getTransactiondate())
                 .customer(getCustomer().toResponse())
-                .purchaseDetails(getPurchaseDetails())
+                .purchaseDetails(detailResponses)
+                .grandTotal(total)
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
                 .build();
