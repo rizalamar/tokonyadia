@@ -27,7 +27,7 @@ public class Customer extends BaseEntity {
     @Column(name = "gender")
     private Gender gender;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 

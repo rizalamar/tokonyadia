@@ -1,5 +1,6 @@
 package com.enigmacamp.todonyadia.entities;
 
+import com.enigmacamp.todonyadia.dto.response.PurchaseResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Purchase {
+public class Purchase extends BaseEntity {
     @Id
     @GeneratedValue
     @UuidGenerator
@@ -33,7 +34,6 @@ public class Purchase {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-
     /**
      * cascade = CascadeType.ALL
      * Saat save Purchase, semua isi purchaseDetails otomatis ikut tersimpan ke database
@@ -41,4 +41,15 @@ public class Purchase {
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("purchase")
     private List<PurchaseDetail> purchaseDetails = new ArrayList<>();
+
+    public PurchaseResponse toResponse(){
+        return PurchaseResponse.builder()
+                .id(getId())
+                .transactiondate(getTransactiondate())
+                .customer(getCustomer().toResponse())
+                .purchaseDetails(getPurchaseDetails())
+                .createdAt(getCreatedAt())
+                .modifiedAt(getModifiedAt())
+                .build();
+    }
 }
