@@ -43,16 +43,8 @@ public class Purchase extends BaseEntity {
 
     public PurchaseResponse toResponse(){
         List<PurchaseDetailResponse> detailResponses = this.purchaseDetails.stream()
-                .map(detail -> {
-                    Double subTotal = detail.getQuantity() * detail.getPriceSell();
-                    return PurchaseDetailResponse.builder()
-                            .id(detail.getId())
-                            .quantity(detail.getQuantity())
-                            .priceSell(detail.getPriceSell())
-                            .subTotal(subTotal) // Set SubTotal
-                            .product(detail.getProduct().toResponse())
-                            .build();
-                }).toList();
+                .map(PurchaseDetail::toResponse)
+                .toList();
 
         Double total = detailResponses.stream()
                 .mapToDouble(PurchaseDetailResponse::getSubTotal)

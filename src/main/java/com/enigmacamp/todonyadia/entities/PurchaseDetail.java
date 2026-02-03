@@ -32,4 +32,14 @@ public class PurchaseDetail {
     @JoinColumn(name = "trx_purchase_id")
     @JsonIgnoreProperties("purchaseDetails")
     private Purchase purchase;
+
+    public PurchaseDetailResponse toResponse(){
+        return PurchaseDetailResponse.builder()
+                .id(getId())
+                .quantity(getQuantity())
+                .priceSell(getPriceSell())
+                .subTotal(getQuantity() * getPriceSell()) // Set SubTotal
+                .product(getProduct().toResponse())
+                .build();
+    }
 }
