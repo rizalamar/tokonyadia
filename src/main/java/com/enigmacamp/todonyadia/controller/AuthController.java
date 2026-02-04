@@ -5,6 +5,7 @@ import com.enigmacamp.todonyadia.dto.request.RefreshTokenRequest;
 import com.enigmacamp.todonyadia.dto.request.RegisterRequest;
 import com.enigmacamp.todonyadia.dto.response.LoginResponse;
 import com.enigmacamp.todonyadia.dto.response.RefreshTokenResponse;
+import com.enigmacamp.todonyadia.entities.RefreshToken;
 import com.enigmacamp.todonyadia.service.auth.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +36,11 @@ public class AuthController {
     @PostMapping("/refresh")
     public RefreshTokenResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest){
         return authService.refreshToken(refreshTokenRequest);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody RefreshTokenRequest refreshTokenRequest){
+        authService.logout(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.ok("Logout");
     }
 }

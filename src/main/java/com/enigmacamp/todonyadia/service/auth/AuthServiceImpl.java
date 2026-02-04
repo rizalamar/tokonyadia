@@ -14,6 +14,7 @@ import com.enigmacamp.todonyadia.service.customer.CustomerService;
 import com.enigmacamp.todonyadia.service.member.MemberService;
 import com.enigmacamp.todonyadia.service.refresh_token.RefreshTokenService;
 import com.enigmacamp.todonyadia.service.role.RoleService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
     private final MemberService memberService;
     private final CustomerService customerService;
@@ -101,7 +103,7 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(
                         member.getUsername(),
                         null,
-                        // member.getAuthorities()
+                        // member.getAuthorities
                         SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 );
 
@@ -111,5 +113,12 @@ public class AuthServiceImpl implements AuthService {
                 newAccessToken,
                 token.getToken()
         );
+    }
+
+    @Override
+    public void logout(String refreshToken) {
+        RefreshToken token = refreshTokenService.findByToken(refreshToken);
+        Member member = token.getMember();
+        refreshTokenService.deleteByMember(member);
     }
 }
