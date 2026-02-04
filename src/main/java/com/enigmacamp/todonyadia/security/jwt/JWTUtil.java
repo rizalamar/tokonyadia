@@ -1,29 +1,52 @@
 package com.enigmacamp.todonyadia.security.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JWTUtil {
-    private static final String SECRET_KEY = "secret-key-belajar-jwt-benar-benar-secret-qwertyqwerty-sudah";
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    @Value("${jwt.expired}")
+    private Long expired;
+
 
     private Key getSigningKey(){
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String username){
-        return Jwts.builder()
-                .subject(username)
+    public String generateToken(Authentication authentication){
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+         return Jwts.builder()
+                .subject(authentication.getName())
+                 .claim("roles", roles)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .expiration(new Date(System.currentTimeMillis() + expired))
                 .signWith(getSigningKey())
                 .compact();
+    }
+
+    public Claims getClaims(String token){
+        return Jwts.parser()
+                .verifyWith((SecretKey) getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public String extractUsername(String token){

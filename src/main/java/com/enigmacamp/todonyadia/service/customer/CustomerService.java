@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public interface CustomerService {
     CustomerResponse saveCustomer(CustomerRequest customer);
+    Customer saveCustomerEntity(Customer customer);
     Page<CustomerResponse> getAllCustomer(Pageable pageable, CustomerSearch customerSearch);
     CustomerResponse getCustomerById(UUID id);
     Customer getCustomerEntityById(UUID id);

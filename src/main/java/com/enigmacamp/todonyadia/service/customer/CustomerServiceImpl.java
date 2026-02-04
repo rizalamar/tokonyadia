@@ -31,14 +31,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse saveCustomer(CustomerRequest payload) {
         Customer customer = Customer.builder()
-                .fullname(payload.fullname())
-                .address(payload.address())
-                .email(payload.email())
-                .gender(payload.gender())
+                .fullname(payload.getFullname())
+                .address(payload.getAddress())
+                .email(payload.getEmail())
+                .gender(payload.getGender())
+                .member(payload.getMember_id())
                 .build();
 
         customerRepository.save(customer);
         return customer.toResponse();
+    }
+
+    @Override
+    public Customer saveCustomerEntity(Customer customer) {
+        return customerRepository.save(customer);
     }
 
     @Override
@@ -72,10 +78,10 @@ public class CustomerServiceImpl implements CustomerService {
                 () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.PRODUCT, id))
             );
 
-        customer.setFullname(customerUpdate.fullname());
-        customer.setAddress(customerUpdate.address());
-        customer.setEmail(customerUpdate.email());
-        customer.setGender(customerUpdate.gender());
+        customer.setFullname(customerUpdate.getFullname());
+        customer.setAddress(customerUpdate.getAddress());
+        customer.setEmail(customerUpdate.getEmail());
+        customer.setGender(customerUpdate.getGender());
 
         customerRepository.save(customer);
         return customer.toResponse();

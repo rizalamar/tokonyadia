@@ -32,8 +32,19 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public Member saveMemberEntity(Member member) {
+        return memberRepository.save(member);
+    }
+
+
+    @Override
     public Page<MemberResponse> getAllMember(Pageable pageable) {
         return memberRepository.findAll(pageable).map(Member::toResponse);
+    }
+
+    @Override
+    public Boolean findByUsername(String username) {
+        return memberRepository.findByUsername(username).isPresent();
     }
 
     @Override

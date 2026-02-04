@@ -4,6 +4,8 @@ import com.enigmacamp.todonyadia.dto.response.MemberResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -19,6 +21,14 @@ public class Member extends BaseEntity {
     private UUID id;
     private String username;
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "m_member_role",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roleSet = new HashSet<>();
 
     public MemberResponse toResponse(){
         return MemberResponse.builder()
