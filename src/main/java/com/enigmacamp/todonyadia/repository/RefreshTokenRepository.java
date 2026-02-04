@@ -1,6 +1,7 @@
 package com.enigmacamp.todonyadia.repository;
 
 import com.enigmacamp.todonyadia.entities.Member;
+import com.enigmacamp.todonyadia.entities.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, UUID> {
-    Optional<Member> findByUsername(String username);
-    Boolean existsByUsername(String username);
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID> {
+    Optional<RefreshToken> findByToken(String token);
+    void deleteByMember(Member member);
 }

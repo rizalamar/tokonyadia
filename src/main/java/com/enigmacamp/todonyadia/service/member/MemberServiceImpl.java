@@ -32,8 +32,19 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public Member saveMemberEntity(Member member) {
+        return memberRepository.save(member);
+    }
+
+
+    @Override
     public Page<MemberResponse> getAllMember(Pageable pageable) {
         return memberRepository.findAll(pageable).map(Member::toResponse);
+    }
+
+    @Override
+    public Boolean findByUsername(String username) {
+        return memberRepository.findByUsername(username).isPresent();
     }
 
     @Override
@@ -43,6 +54,20 @@ public class MemberServiceImpl implements MemberService{
                 () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.MEMBER, id))
             );
         return member.toResponse();
+    }
+
+    @Override
+    public Member getMemberEntityById(UUID id) {
+        return memberRepository.findById(id).orElseThrow(
+            () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.MEMBER, id))
+        );
+    }
+
+    @Override
+    public Member getMemberEntityByUsername(String username) {
+        return memberRepository.findByUsername(username).orElseThrow(
+                () -> new RuntimeException("Member not found")
+        );
     }
 
     @Override
