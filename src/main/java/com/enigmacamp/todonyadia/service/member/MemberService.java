@@ -14,6 +14,8 @@ public interface MemberService {
     Page<MemberResponse> getAllMember(Pageable pageable);
     Boolean findByUsername(String username);
     MemberResponse getMemberById(UUID id);
+    Member getMemberEntityById(UUID id);
+    Member getMemberEntityByUsername(String username);
     MemberResponse updateMember(UUID id, MemberRequest member);
     void deleteMember(UUID id);
 }

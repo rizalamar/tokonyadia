@@ -1,8 +1,10 @@
 package com.enigmacamp.todonyadia.controller;
 
 import com.enigmacamp.todonyadia.dto.request.LoginRequest;
+import com.enigmacamp.todonyadia.dto.request.RefreshTokenRequest;
 import com.enigmacamp.todonyadia.dto.request.RegisterRequest;
 import com.enigmacamp.todonyadia.dto.response.LoginResponse;
+import com.enigmacamp.todonyadia.dto.response.RefreshTokenResponse;
 import com.enigmacamp.todonyadia.service.auth.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +30,10 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
         authService.register(registerRequest);
         return ResponseEntity.ok("Register Successfully");
+    }
+
+    @PostMapping("/refresh")
+    public RefreshTokenResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest){
+        return authService.refreshToken(refreshTokenRequest);
     }
 }

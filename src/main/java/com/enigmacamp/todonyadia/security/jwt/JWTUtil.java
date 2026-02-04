@@ -57,4 +57,15 @@ public class JWTUtil {
                 .getPayload()
                 .getSubject();
     }
+
+    public String generateTokenFromUsername(String username, List<String> roles){
+        return Jwts.builder()
+                .subject(username)
+                .claim("roles", roles)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expired))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
 }

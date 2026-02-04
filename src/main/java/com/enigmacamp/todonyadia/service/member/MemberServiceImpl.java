@@ -57,6 +57,20 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public Member getMemberEntityById(UUID id) {
+        return memberRepository.findById(id).orElseThrow(
+            () -> new DataNotFoundException(String.format(ResponseMessage.NOT_FOUND_MESSAGE, ResponseMessage.MEMBER, id))
+        );
+    }
+
+    @Override
+    public Member getMemberEntityByUsername(String username) {
+        return memberRepository.findByUsername(username).orElseThrow(
+                () -> new RuntimeException("Member not found")
+        );
+    }
+
+    @Override
     public MemberResponse updateMember(UUID id, MemberRequest memberUpdate) {
         Member member = memberRepository.findById(id)
             .orElseThrow(

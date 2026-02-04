@@ -3,10 +3,12 @@ package com.enigmacamp.todonyadia.entities;
 import com.enigmacamp.todonyadia.dto.response.MemberResponse;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "m_member")
@@ -15,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue
     private UUID id;
@@ -38,5 +40,12 @@ public class Member extends BaseEntity {
                 .createdAt(getCreatedAt())
                 .modifiedAt(getModifiedAt())
                 .build();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roleSet.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 }
